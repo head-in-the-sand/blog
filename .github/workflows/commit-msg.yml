@@ -22,5 +22,6 @@ jobs:
         path: ~/.cache/pre-commit
         key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
     - run: |
+        pre-commit install --install-hooks -t manual
         pre-commit run --hook-stage manual citizen-branch
       shell: bash
