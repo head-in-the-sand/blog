@@ -15,13 +15,7 @@ jobs:
     - uses: actions/setup-python@v3
     - run: python -m pip install pre-commit
       shell: bash
-    - run: python -m pip freeze --local
+    - run: pre-commit install --install-hooks -t commit-msg
       shell: bash
-    - uses: actions/cache@v4
-      with:
-        path: ~/.cache/pre-commit
-        key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
-    - run: |
-        pre-commit install --install-hooks -t commit-msg
-        pre-commit run --hook-stage manual citizen-branch
+    - run: pre-commit run --hook-stage manual commitizen-branch
       shell: bash
