@@ -1,9 +1,7 @@
 name: commit-msg
 
 on:
-  pull_request:
-    branches: [main]
-  push:
+  merge_group:
     branches: [main]
 
 jobs:
@@ -24,9 +22,5 @@ jobs:
         path: ~/.cache/pre-commit
         key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
     - run: |
-        git log -1
-        for commit in $(git rev-list main..HEAD); do
-            git log -1 --format=%B $commit >| commit_msg.txt
-            pre-commit run --hook-stage commit-msg --commit-msg-filename commit_msg.txt
-        done
+        pre-commit run --hook-stage manual citizen-branch
       shell: bash
