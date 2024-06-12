@@ -11,9 +11,3 @@ repos:
       stages: [pre-commit]
     - id: check-added-large-files
       stages: [pre-commit]
-  - repo: https://github.com/commitizen-tools/commitizen
-    rev: v3.27.0
-    hooks:
-      - id: commitizen-branch
-        stages: [manual]
-        args: [--rev-range, HEAD]
