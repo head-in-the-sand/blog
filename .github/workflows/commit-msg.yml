@@ -1,7 +1,7 @@
 name: commitlint
 
 on:
-  merge_group:
+  pull_request:
     branches: [main]
 
 jobs:
@@ -18,4 +18,4 @@ jobs:
           npm install @commitlint/cli @commitlint/config-conventional --save-dev
           echo "module.exports = { extends: ['@commitlint/config-conventional'] };" > commitlint.config.js
       - name: Validate PR commit message
-        run: echo ${{ github.event.pull_request.title}}\n\n${{ github.event.pull_request.body}} | npx commitlint
+        run: echo ${{ github.event.pull_request.title }}\n\n${{ github.event.pull_request.body }} | npx commitlint
