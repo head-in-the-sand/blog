@@ -10,9 +10,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Display info
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
       run: |
         pwd
         tree -a -I '.git'
         git status
+        echo $GITHUB_CONTEXT
     - name: Run slow CI (emulated by a long sleep)
-      run: sleep 300
+      run: sleep 60
