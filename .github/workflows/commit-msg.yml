@@ -1,21 +1,33 @@
-name: commit-msg
+name: commitlint
 
 on:
   merge_group:
     branches: [main]
 
 jobs:
-  commit-msg:
-    runs-on: ubuntu-latest
-
+  commitlint:
+    runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - uses: actions/setup-python@v3
-    - run: python -m pip install pre-commit
-      shell: bash
-    - run: pre-commit install --install-hooks -t commit-msg
-      shell: bash
-    - run: pre-commit run --hook-stage manual commitizen-branch
-      shell: bash
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install required dependencies
+        run: |
+          apt update
+          apt install -y sudo
+          sudo apt install -y git curl
+          curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+          sudo DEBIAN_FRONTEND=noninteractive apt install -y nodejs
+      - name: Print versions
+        run: |
+          git --version
+          node --version
+          npm --version
+          npx commitlint --version
+      - name: Install commitlint
+        run: |
+          npm install conventional-changelog-conventionalcommits
+          npm install commitlint@latest
+
+      - name: Validate PR commit message
+        run: npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
