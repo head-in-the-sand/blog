@@ -3,7 +3,6 @@
 # tools if required and much of what it does can better served by a build
 # system.
 name: ci
-
 on:
   pull_request:
     branches:
@@ -11,24 +10,23 @@ on:
   merge_group:
     branches:
       - main
-
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Setup Python
-      uses: actions/setup-python@v3
-    # PR CI is run on PRs and merge queue, to ensure that the PR is working
-    # before consuming resources on the merge queue. The merge Queue CI needs
-    # to re-run the PR to ensure it works with other PRs in the merge queue.
-    - name: PR CI
-      uses: pre-commit/action@v3.0.1
-    - name: Merge CI
-      # Merge queue CI is run only on the merge queue.
-      if: github.event_name == 'merge_group'
-      run: |
-        python -m pip install commitizen
-        git log -1 --format=%B HEAD >| commit_msg.txt
-        cz check --commit-msg-file commit_msg.txt
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
+      # PR CI is run on PRs and merge queue, to ensure that the PR is working
+      # before consuming resources on the merge queue. The merge Queue CI needs
+      # to re-run the PR to ensure it works with other PRs in the merge queue.
+      - name: PR CI
+        uses: pre-commit/action@v3.0.1
+      - name: Merge CI
+        # Merge queue CI is run only on the merge queue.
+        if: github.event_name == 'merge_group'
+        run: |
+          python -m pip install commitizen
+          git log -1 --format=%B HEAD >| commit_msg.txt
+          cz check --commit-msg-file commit_msg.txt
