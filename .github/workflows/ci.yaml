@@ -30,6 +30,7 @@ jobs:
         uses: errata-ai/vale-action@reviewdog
         with:
           fail_on_error: true
+          reporter: github-pr-check
       - name: Merge CI
         # Merge queue CI is run only on the merge queue.
         if: github.event_name == 'merge_group'
