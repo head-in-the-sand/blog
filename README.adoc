@@ -1,0 +1,59 @@
+:toc:
+:toc-placement!:
+
+= Head in the Sand
+
+Welcome to the Head in the Sand repository, it stores all the code and content for the Head in the Sand blog.
+
+toc::[]
+
+== Infrastructure
+
+=== Pre-commit Checks
+
+Pre-commit checks are run on every commit to the ensure that the code passes some basic cleanliness checks.
+For example, whitespace line endings and code style.
+This ensures that commits are focused on functionality rather than modifying code style.
+No one wants to 90% of a commit to be line ending changes due to windows line endings!
+
+To enable pre-commit checks, https://pre-commit.com/#install[install pre-commit] and run the following command:
+```
+pre-commit install --install-hooks
+```
+
+Pre-commits are added to the repository by adding a `.pre-commit-config.yaml` file to the root of the repository.
+This file contains the configuration for the pre-commit checks that should be run.
+
+=== Merge strategy
+
+The aim of the repository's merge strategy is to maintain a linear history on main.
+This ensures that the history is clean and easy to traverse.
+The merge strategy is squash-merge on PRs.
+This means that development on PRs can follow any strategy, but when the PR is merged, the commits are squashed.
+
+=== Conventional Commits
+
+When a PR is merged, GitHub is configured to use the PR title and description for the squash-merge commit message.
+Therefore the PR title and description must follow conventional commits.
+This is assisted through the PR message template stored under `.github/pull_request_template.md`.
+There is also a merge-queue check to ensure the final commit message follows this rule.
+
+=== Continuous Integration
+
+The repository is configured to use GitHub Actions for continuous integration (CI). The configuration is stored under `.github/workflows/`. The CI is configured to run on every PR to main. A merge-queue is also configured that allow some additional checks to be performed on the squash-merge commit itself.
+
+== Documentation
+
+=== AsciiDoc
+
+Documentation is written using https://docs.asciidoctor.org/asciidoc/latest/[AsciiDoc].
+
+=== Vale
+
+AsciiDoc is linted using Vale. Vale uses proselint as. The tool is configured via `vale.ini`.
+The vocabulary for the blog is maintained in `styles/config/vocabularies/blog/accept.txt`.
+
+To run vale:
+```
+vale .
+```
