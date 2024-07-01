@@ -46,7 +46,7 @@ The repository is configured to use GitHub Actions for continuous integration (C
 
 === AsciiDoc
 
-Documentation is written using https://docs.asciidoctor.org/asciidoc/latest/[AsciiDoc].
+Documentation is written using https://docs.asciidoctor.org/asciidoc/latest/[AsciiDoc]. Bleujen.
 
 === Vale
 
