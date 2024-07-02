@@ -27,21 +27,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
+        if: |
+          github.event_name == 'merge_group' ||
+          github.event_name == 'pull_request'
         uses: actions/checkout@v4
-        if: |
-          github.event_name == 'merge_group' ||
-          github.event_name == 'pull_request'
       - name: Setup Python
+        if: |
+          github.event_name == 'merge_group' ||
+          github.event_name == 'pull_request'
         uses: actions/setup-python@v3
-        if: |
-          github.event_name == 'merge_group' ||
-          github.event_name == 'pull_request'
       - name: PR Pre-commit CI
-        uses: pre-commit/action@v3.0.1
         if: |
           github.event_name == 'merge_group' ||
           github.event_name == 'pull_request'
-      - name: Merge Queue Pre- CI
+        uses: pre-commit/action@v3.0.1
+      - name: Merge Queue Pre-commit CI
         if: github.event_name == 'merge_group'
         run: |
           python -m pip install commitizen
@@ -54,18 +54,18 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
         if: |
           github.event_name == 'merge_group' ||
           github.event_name == 'pull_request'
+        uses: actions/checkout@v4
       - name: PR Vale CI
+        if: |
+          github.event_name == 'merge_group' ||
+          github.event_name == 'pull_request'
         uses: errata-ai/vale-action@reviewdog
         with:
           fail_on_error: true
           reporter: github-check
-        if: |
-          github.event_name == 'merge_group' ||
-          github.event_name == 'pull_request'
   hugo-build:
     runs-on: ubuntu-latest
     env:
@@ -100,17 +100,17 @@ jobs:
         with:
           path: ./public
   hugo-deploy:
+    if: |
+      github.event_name == 'push'
     runs-on: ubuntu-latest
-    concurrency:
-      group: "pages"
-      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
     needs: hugo-build
     steps:
       - name: Deploy to GitHub Pages
-        if: |
-          github.event_name == 'push'
         id: deployment
         uses: actions/deploy-pages@v4
