@@ -102,7 +102,7 @@ jobs:
     concurrency:
       group: "pages"
       cancel-in-progress: false
-    env:
+    environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     needs: hugo-build
