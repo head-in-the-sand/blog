@@ -24,32 +24,30 @@ defaults:
     shell: bash
 jobs:
   pre-commit:
-    if: |
-      github.event_name == 'merge_group' ||
-      github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        if: |
+          github.event_name == 'merge_group' ||
+          github.event_name == 'pull_request'
       - name: Setup Python
         uses: actions/setup-python@v3
+        if: |
+          github.event_name == 'merge_group' ||
+          github.event_name == 'pull_request'
       - name: PR Pre-commit CI
         uses: pre-commit/action@v3.0.1
-      - name: PR Vale CI
-        uses: errata-ai/vale-action@reviewdog
-        with:
-          fail_on_error: true
-          reporter: github-check
-      - name: Merge CI
+        if: |
+          github.event_name == 'merge_group' ||
+          github.event_name == 'pull_request'
+      - name: Merge Queue Pre- CI
         if: github.event_name == 'merge_group'
         run: |
           python -m pip install commitizen
           git log -1 --format=%B HEAD >| commit_msg.txt
           cz check --commit-msg-file commit_msg.txt
   vale:
-    if: |
-      github.event_name == 'merge_group' ||
-      github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -57,11 +55,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        if: |
+          github.event_name == 'merge_group' ||
+          github.event_name == 'pull_request'
       - name: PR Vale CI
         uses: errata-ai/vale-action@reviewdog
         with:
           fail_on_error: true
           reporter: github-check
+        if: |
+          github.event_name == 'merge_group' ||
+          github.event_name == 'pull_request'
   hugo-build:
     runs-on: ubuntu-latest
     env:
@@ -96,8 +100,6 @@ jobs:
         with:
           path: ./public
   hugo-deploy:
-    if: |
-      github.event_name == 'push'
     runs-on: ubuntu-latest
     concurrency:
       group: "pages"
@@ -108,5 +110,7 @@ jobs:
     needs: hugo-build
     steps:
       - name: Deploy to GitHub Pages
+        if: |
+          github.event_name == 'push'
         id: deployment
         uses: actions/deploy-pages@v4
