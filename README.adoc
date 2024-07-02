@@ -42,11 +42,18 @@ There is also a merge-queue check to ensure the final commit message follows thi
 
 The repository is configured to use GitHub Actions for continuous integration (CI). The configuration is stored under `.github/workflows/`. The CI is configured to run on every PR to main. A merge-queue is also configured that allow some additional checks to be performed on the squash-merge commit itself.
 
-== Documentation
+== The Blog
+
+=== Hugo
+
+The blog is hosted using https://gohugo.io/[Hugo].
+Hugo is a static site generator that uses Markdown or AsciiDoc files to generate a static website.
+It uses the https://github.com/theNewDynamic/gohugo-theme-ananke[Ananke theme] because it includes all the features to quickly get up and running.
+The blog is automatically built and deployed to GitHub Pages using GitHub Actions.
 
 === AsciiDoc
 
-Documentation is written using https://docs.asciidoctor.org/asciidoc/latest/[AsciiDoc].
+The blog is written using https://docs.asciidoctor.org/asciidoc/latest/[AsciiDoc].
 
 === Vale
 
